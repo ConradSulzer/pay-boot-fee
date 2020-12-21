@@ -1,0 +1,246 @@
+/* Sliders==================================================== */
+
+.switch {
+    position: relative;
+    display: flex;
+    width: 60px;
+    height: 25px;
+    /* display: inline-block; */
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 17px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: #2196F3;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+.switch p {
+    margin-left: 65px;
+}
+
+.sliderContain {
+    max-width: 250px;
+    width: 100%;
+}
+
+/* Top menu============================================= */
+
+#viewBootMenu {
+    display: flex;
+    justify-content: space-evenly;
+    background: white;
+    padding: 12px 0 4px 0;
+    border-radius: 4px;
+}
+
+.menuSection {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 0 10px;
+}
+
+#viewBootMenuDiv {
+    width: 100%;
+}
+
+#filterButton {
+    display: none;
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    font-size: 30px;
+    color: #001f3f;
+}
+
+.filterClick {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+@media all and (min-width: 501px) and (max-width: 800px) {
+    #viewBootMenu {
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
+    .menuSection {
+        padding: 10px;
+    }
+}
+
+@media all and (max-width: 500px) {
+    #viewBootMenuDiv {
+        display: none;
+    }
+
+    #viewBootMenu {
+        padding-top: 10px;
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
+    .menuSection {
+        flex-direction: column;
+        padding: 0 10px;
+    }
+    .sliderContain {
+        max-width: 450px;
+    }
+    .sliderContain a {
+        display: block;
+    }
+
+    #filterButton {
+        display: table;
+    }
+}
+
+/* Boot entries========================================================== */
+.status-div {
+    display: flex;
+    width: 100%;
+}
+
+.icon-contain {
+    width: 70px;
+    background: white;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    font-size: 30px;
+    color: #001f3f;
+    cursor: pointer;
+}
+
+.icon-contain-middle {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.chev-icon.active {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.fas.paid-icon {
+    visibility: hidden;
+    color: #ace23c;
+}
+
+.fas.paid-icon.active{
+    visibility: visible;
+}
+
+.boot-bar {
+    max-width: 200px;
+    width: 100%;
+}
+
+.boot-info {
+    display: none;
+    padding: 10px;
+}
+
+.boot-info.active {
+    display: block;
+}
+
+.boot-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.boot-list li {
+    background-color: white;
+    border-radius: 4px;
+    margin-top: 2px;
+}
+
+.boot-record {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-right: 30px;
+    padding: 0 15px;
+}
+
+.boot-record p {
+    margin-bottom: 0;
+    padding-top: 11px;
+}
+
+.note-input {
+    margin-bottom: 7px;
+}
+
+.delete-div{
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.delete-boot {
+    font-weight: 500;
+    float: right;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+@media all and (min-width: 326px) and (max-width: 500px) {
+    .delete-div{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+}
+
+@media all and (max-width: 325px) {
+    .status-div {
+        flex-direction: column;
+    }
+}

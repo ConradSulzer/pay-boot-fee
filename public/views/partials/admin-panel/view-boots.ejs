@@ -1,0 +1,108 @@
+<!-- Filter menu bar -->
+<div>
+    <div id="filterButton">
+        <div id="filterClick" class="filterClick">
+            <i class="fas fa-filter"></i>
+        </div>
+    </div>
+    <div id="viewBootMenuDiv">
+        <div id="viewBootMenu">
+            <div class="menuSection">
+                <div class="sliderContain">
+                    <label class="switch" for="deployed">
+                        <input type="checkbox" id="deployed" name="deployed"
+                            <%= toggle === 'deployed' ? 'checked' : 'nope' %>>
+                        <span class="slider"></span>
+                        <p>Deployed</p>
+                    </label>
+                </div>
+                <div class="sliderContain">
+                    <label class="switch" for="not-deployed">
+                        <input type="checkbox" id="not-deployed" name="not-deployed"
+                            <%= toggle === 'not-deployed' ? 'checked' : 'nope' %>>
+                        <span class="slider"></span>
+                        <p>Undeployed</p>
+                    </label>
+                </div>
+            </div>
+            <div class="menuSection">
+                <div class="sliderContain">
+                    <label class="switch" for="paid">
+                        <input type="checkbox" id="paid" name="paid" <%= toggle === 'paid' ? 'checked' : 'nope' %>>
+                        <span class="slider"></span>
+                        <p>Paid</p>
+                    </label>
+                </div>
+                <div class="sliderContain">
+                    <label class="switch" for="flagged">
+                        <input type="checkbox" id="flagged" name="flagged"
+                            <%= toggle === 'flagged' ? 'checked' : 'nope' %>>
+                        <span class="slider"></span>
+                        <p>Flagged</p>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- messages -->
+    <div id="resMessage"></div>
+
+    <!-- boot list -->
+    <ul class="boot-list">
+        <% boots.forEach(function(boot){%>
+        <li>
+            <div class="liContain">
+                <div class="boot-record">
+                    <div class="icon-contain">
+                        <div class="icon-contain-middle">
+                            <i class="fas fa-chevron-right chev-icon" onclick="app.chevronToggle(this)"></i>
+                        </div>
+                    </div>
+                    <p class="boot-bar"><%= boot.bootId %></p>
+                    <div class="status-div">
+                        <p class="boot-bar"><%= boot.status %></p>
+                        <div class="icon-contain">
+                            <div class="icon-contain-middle">
+                                <i class="fas fa-money-bill-alt paid-icon <%= boot.paid ? 'active' : '' %>"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="boot-info">
+                <div id="<%= boot['_id'] %>" class="bootInfoDiv">
+                    <div class="delete-div">
+                        <div class="delete-boot text-danger" onclick="app.deleteBoot(this)" id="checkin" data.id="<%= boot['_id'] %>">Delete Boot</div>
+                        <% if (boot.flagged) { %>
+                            <div class="delete-boot text-info" onclick="app.removeFlag(this)" data.id="<%= boot['bootId'] %>">Remove Flag</div>
+                        <% } %>
+                    </div>
+                    <p><strong>License Plate:</strong> <%= typeof boot.plate !== 'undefined' ? boot.plate : 'None' %>
+                    </p>
+                    <p><strong>Make:</strong> <%= typeof boot.make !== 'undefined' ? boot.make : 'None' %></p>
+                    <p><strong>Model:</strong> <%= typeof boot.model !== 'undefined' ? boot.model : 'None' %></p>
+                    <p><strong>Location:</strong> <%= typeof boot.location != 'undefined' ? boot.location : 'None' %>
+                    </p>
+                    <p><strong>Reason:</strong> <%= typeof boot.reason !== 'undefined' ? boot.reason : 'None' %></p>
+                    <p><strong>Time:</strong> <%= typeof boot.time !== 'undefined' ? boot.time : 'None' %></p>
+                    <p><strong>Agent:</strong> <%= typeof boot.agent !== 'undefined' ? boot.agent : 'None' %></p>
+                    <p><strong>Unlock Code:</strong> <%= typeof boot.unlock !== 'undefined' ? boot.unlock : 'None' %>
+                    </p>
+                </div>
+                <div class="addBootNote">
+                    <div class="boot-notes">
+                        <p>Notes:</p>
+                        <% boot.notes.forEach(function(note){%>
+                            <p>-- <%= note %></p>
+                        <% }); %>
+                    </div>
+                    <input type="text" class="note-input">
+                    <button type="button" class="btn-sm btn-primary" onclick="app.addBootNote(this)"
+                        data-id="<%= boot['_id'] %>">Add Note</button>
+                </div>
+            </div>
+        </li>
+        <% }); %>
+    </ul>
+</div>
+<script src="../../../js/admin-js/boot-listeners.js"></script>

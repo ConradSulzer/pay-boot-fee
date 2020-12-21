@@ -1,0 +1,12 @@
+<div id="addNewBootForm">
+    <form class="partialForm" id="checkin-boot">
+        <div id="resMessage"></div>
+        <div class="form-group">
+            <label for="bootId">Boot ID</label>
+            <input type="text" class="form-control" id="bootId" name="bootId" aria-describedby="boot id"
+                placeholder="Enter boot ID" required>
+        </div>
+        <button type="button" class="btn btn-primary" id="checkin" onclick="app.checkinBoot(this)">Check-in</button>
+        <button type="button" class="btn btn-danger" id="flag" onclick="app.checkinBoot(this)">Flag/Damaged</button>
+    </form>
+</div>

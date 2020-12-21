@@ -1,0 +1,17 @@
+<div id="addNewBootForm">
+    <form class="partialForm" id="<%= formId %>">
+        <div id="resMessage"></div>
+        <div class="form-group">
+            <label for="bootId">Boot ID</label>
+            <input type="text" class="form-control" id="bootId" name="bootId" aria-describedby="boot id"
+                placeholder="Enter boot ID" required>
+        </div>
+        <div class="form-group">
+            <label for="unlock">Unlock Code</label>
+            <input type="text" class="form-control" id="unlock" name="unlock" aria-describedby="boot unlock code">
+            <small id="unlockCodeHelp" class="form-text text-muted">Optional, unlock codes are auto generated on
+                deployment</small>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="app.addBoot()">Submit</button>
+    </form>
+</div>

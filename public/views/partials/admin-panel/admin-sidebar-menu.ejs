@@ -1,0 +1,50 @@
+<nav id="sidebar" class="show">
+    
+    <div class="sidebar-header">
+        <div>
+            <h3>Admin Panel</h3>
+        </div>
+        <div id="dismiss">
+            <i class="fas fa-arrow-circle-left"></i>
+        </div>
+        
+    </div>
+    
+    <ul class="list-unstyled components">
+        <li>
+            <a href="#manageBootSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Manage Boots</a>
+            <ul class="collapse list-unstyled" id="manageBootSubmenu">
+                <li>
+                    <a href="#view-boots" id="view-boots">View All Boots</a>
+                </li>
+                <li>
+                    <a href="#add-boot" id="add-boot">Add New Boot</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#manageAgentSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Manage
+                Agents</a>
+            <ul class="collapse list-unstyled" id="manageAgentSubmenu">
+                <li>
+                    <a href="#view-agents" id="view-agents" class="sideBarMenuItem" >View All Agents</a>
+                </li>
+                <li>
+                    <a href="#add-new-agent" id="add-agent" class="sideBarMenuItem" >Add New Agent</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#checkout-boot" id="checkout-boot">Check-out Boot</a>
+        </li>
+        <li>
+            <a href="#checkin-boot" id="checkin-boot">Check-in Boot</a>
+        </li>
+        <li>
+            <a href="/admin/logout" class="logout">Logout</a>
+        </li>
+    </ul>
+</nav>
+
+<!-- Dark overlay -->
+<div class="dark-overlay"></div>

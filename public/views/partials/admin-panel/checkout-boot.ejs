@@ -1,0 +1,36 @@
+<div id="checkoutBootForm">
+    <form class="partialForm">
+        <div id="resMessage"></div>
+        <div class="form-group">
+            <label for="bootId">Boot ID</label>
+            <input type="text" class="form-control" id="bootId" name="bootId" aria-describedby="boot id"
+                placeholder="Enter boot ID" required>
+        </div>
+        <div class="form-group">
+            <label for="plate">License plate</label>
+            <input type="text" class="form-control" id="plate" name="plate" aria-describedby="license plate"
+            placeholder="Enter license plate" required>
+        </div>
+        <div class="form-group">
+            <label for="make">Make</label>
+            <input type="text" class="form-control" id="make" name="make" aria-describedby="vehicle make"
+            placeholder="Enter make" required>
+        </div>
+        <div class="form-group">
+            <label for="model">Model</label>
+            <input type="text" class="form-control" id="model" name="model" aria-describedby="vehicle model"
+            placeholder="Enter model" required>
+        </div>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" class="form-control" id="location" name="location" aria-describedby="location"
+            placeholder="Enter location" required>
+        </div>
+        <div class="form-group">
+            <label for="reason">Reason</label>
+            <input type="text" class="form-control" id="reason" name="reason" aria-describedby="license plate"
+            placeholder="Enter reason" required>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="app.checkoutBoot()">Submit</button>
+    </form>
+</div>

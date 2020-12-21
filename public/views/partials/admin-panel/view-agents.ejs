@@ -1,0 +1,31 @@
+<div class="agentListContain">
+    <div id="resMessage" style="margin-right: 25px;"></div>
+    <ul class="agentList">
+        <% agents.forEach(function(agent){%>
+        <li>
+            <div class="liContain">
+                <div class="agentRecord">
+                    <div class="agentFields">
+                        <p><%= agent.username %></p>
+                        <p><%= agent.role %></p>
+                    </div>
+                    <div class="agentFields">
+                        <p><%= agent.firstname %></p>
+                        <p><%= agent.lastname %></p>
+                    </div>
+                </div>
+                <div id="<%= agent['_id'] %>" class="agentEditDiv">
+                    <button type="button" class="btn btn-primary" onclick="app.toggleEditPassword(this)">Edit Password</button>
+                    <button type="button" class="btn btn-danger" onclick="app.deleteAgent(this)">Delete User</button>
+                </div>
+            </div>
+            
+            <div class="editPassword">
+                <span><p>New Password:</p></span>
+                <input type="text">
+                <button type="button" class="btn-sm btn-primary" onclick="app.editPassword(this)" data-id="<%= agent['_id'] %>">Update</button>
+            </div>
+        </li>
+        <% }); %>
+    </ul>
+</div>

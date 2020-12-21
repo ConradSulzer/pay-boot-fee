@@ -1,0 +1,263 @@
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+body {
+    background-color: #e5f1fc;
+    font-family: 'Poppins', sans-serif;
+}
+
+p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
+}
+
+/* Sidebar Navigation ============================*/
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#content {
+    width: 100%;
+}
+
+#sidebar
+ {
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 100vh;
+    background: #001f3f;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+a, a:hover, a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px 10px;
+    background: #002c59;
+    display: flex;
+    justify-content: space-between;
+}
+
+#sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #002c59;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+}
+
+#sidebar ul li a:hover {
+    color: #001f3f;
+    background: #fff;
+}
+
+#sidebar ul li.active>a, a[aria-expanded="true"] {
+    color: #fff;
+    background: #002c59;
+}
+
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #002c59;
+}
+
+#dismiss {
+    cursor: pointer;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: -5px;
+    margin-top: -5px;
+}
+
+#dismiss:hover {
+    color: #a2a9ca;
+}
+
+#menuIcon {
+    color: #001f3f;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+#menuIcon2 {
+    display: none;
+    color: #001f3f;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.dark-overlay {
+    display: none;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 998;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+@media (max-width: 1150px) {
+    #sidebar {
+        position: fixed;
+        margin-left: -250px;
+        z-index: 9999;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+
+    .dark-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+
+    #menuIcon {
+        display: none;
+    }
+
+    #menuIcon2 {
+        display: block;
+    }
+}
+
+/* Dashboard Main content ===============================================*/
+
+#dashboardMain {
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-right: 25px;
+}
+
+.partialForm {
+    max-width: 300px;
+}
+
+/* Error Messages======================================================== */
+
+#resMessage {
+    margin-top: 10px;
+}
+
+/* View Agents============================================================= */
+.agentList {
+    list-style-type: none;
+    margin-right: 25px;
+    padding-left: 0;
+}
+
+.agentList li {
+    background-color: white;
+    border-radius: 4px;
+    margin-top: 2px;
+    padding: 10px;
+}
+
+.liContain {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+.agentRecord {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-right: 30px;
+    padding: 0 15px;
+}
+
+.agentFields p {
+    display: block;
+    margin-bottom: 0;
+    padding-top: 5px;
+    max-width: 250px;
+    width: 100%;
+}
+
+.agentEditDiv p {
+    display: block;
+    margin-bottom: 0;
+    padding-top: 5px;
+}
+
+.agentEditDiv {
+    display: flex;
+    width: 300px;
+    justify-content: space-evenly;
+    border-left: 1px solid #80808021;
+}
+
+.agentFields {
+    display: flex;
+    width: 100%;
+}
+
+.agentEditDiv button {
+    margin: 0 5px;
+}
+
+.editPassword {
+    display: none;
+    border-top: 1px solid #ececec;
+    margin: 10px;
+}
+
+.editPassword div {
+    margin: 10px;
+}
+
+.editPassword span p {
+    margin: 10px 0 0;
+}
+
+@media all and (min-width: 651px) and (max-width: 850px) {
+    .liContain {
+        flex-direction: column;
+    }
+    .agentEditDiv {
+        justify-content: space-between;
+        border-left: none;
+        padding-left: 15px;
+    }
+}
+
+@media all and (max-width: 650px) {
+    .liContain {
+        flex-direction: column;
+    }
+    
+    .agentRecord {
+        flex-direction: column;
+    }
+
+    .agentEditDiv {
+        justify-content: space-evenly;
+        border-left: none;
+        max-width: 650px;
+        width: 100%;
+    }
+}

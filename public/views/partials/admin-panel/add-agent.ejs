@@ -1,0 +1,42 @@
+<div id="newAgentForm">
+    <div id="resMessage"></div>
+    <form class="partialForm" id="<%= formId %>">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="bootId" name="username" aria-describedby="boot id"
+                placeholder="Enter username" autocomplete="username" required>
+        </div>
+        <div class="form-group">
+            <label for="firstname">First Name</label>
+            <input type="text" class="form-control" id="firstname" name="firstname" aria-describedby="first name"
+                placeholder="Enter first name">
+        </div>
+        <div class="form-group">
+            <label for="lastname">Last Name</label>
+            <input type="text" class="form-control" id="lastname" name="lastname" aria-describedby="last name"
+                placeholder="Enter last name">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password"
+                autocomplete="new-password" aria-describedby="password">
+        </div>
+        <div class="form-group">
+            <label for="passwordConfirm">Confirm Password</label>
+            <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm"
+                placeholder="Re-enter password" autocomplete="new-password" aria-describedby="re-enter password">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="inputGroupSelect01">Role</label>
+            </div>
+            <select class="custom-select" id="selectRole" name="role">
+              <option selected>Choose...</option>
+              <option value="Admin">Admin</option>
+              <option value="Agent">Agent</option>
+            </select>
+          </div>
+        <button type="button" class="btn btn-primary" onClick="app.submitNewAgent()">Submit</button>
+        <div id="formErrorMessage"></div>
+    </form>
+</div>
