@@ -1,0 +1,41 @@
+  /* Enter boot ID================================== */
+
+  .boot-input {
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 28px;
+  }
+
+  .input-boot-contain {
+    background: whitesmoke;
+    height: 400px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+  }
+
+  .input-boot-contain form {
+    display: inline-block;
+  }
+
+  .boot-id-title {
+    text-align: center;
+    margin: 40px 0;
+  }
+
+  .boot-id-next {
+    max-width: 300px;
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .errorMessage {
+    margin-top: 16px;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }

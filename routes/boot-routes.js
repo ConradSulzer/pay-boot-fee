@@ -8,6 +8,16 @@ const genUnlock = require('../resources/gen-unlock');
 
 // GET request===========================================================================
 // ======================================================================================
+router.get('/get-boots', async (req, res) => {
+    const boots = await Boot.find({});
+    
+    const bootIds = boots.map((boot) => {
+        return boot.bootId;
+    });
+    
+    res.status(200).send(bootIds);
+})
+
 router.get('/admin/view-boots', auth, async (req, res) => {
     try {
         const boots = await Boot.find(req.query);

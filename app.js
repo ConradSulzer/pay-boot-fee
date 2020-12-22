@@ -30,7 +30,7 @@ app.use(session({
 
 //Middleware------------------------------------------
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 //Setup static resource route and EJS------------------
 const publicDirectoryPath = path.join(__dirname, '/public');

@@ -1,0 +1,29 @@
+<%- include('../partials/frontend/head.ejs') %>
+<link rel="stylesheet" href="../../../css/front/boot-page.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="input-boot-contain">
+            <div class="boot-id-title">
+                <h4>PayMyBootFee.com</h4>
+            </div>
+            
+            <form action="/validate-boot" method="POST">
+                <label for="enterBoot">Enter your boot ID to pay fee</label>
+                <input type="text" id="enterBoot" name="enterBoot" class="form-control boot-input" placeholder="******" maxlength="6">
+                <button type="submit" class="btn btn-primary boot-id-next ">Next</button>
+            </form>
+            <div class="errorMessage">
+                <% if (typeof message !== 'undefined') {%>
+                    <div class="alert alert-danger"><%= message %></div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+
+<%- include('../partials/frontend/foot.ejs') %>
+<script src="../../js/front-js/app-listener.js"></script>
+<script src="../../js/front-js/get-boots.js"></script>
+</footer>

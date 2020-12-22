@@ -1,0 +1,53 @@
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+body {
+  background: #383838;
+  font-family: Poppins, sans-serif;
+  padding-top: 10vh;
+}
+
+.input-card {
+  background: whitesmoke;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.card-title {
+  text-align: center;
+}
+
+.button-bank {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.button-bank button {
+  width: 150px;
+}
+
+.top-border {
+  border-top: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+/* Vehicle details===================================== */
+
+.boot-input {
+  margin-bottom: 16px;
+}
+
+.disclaimer-text {
+  padding: 15px;
+  margin-top: -16px;
+}
+
+.details-row {
+  margin-bottom: -16px;
+}
+
+.email-details {
+  margin-bottom: 16px;
+}
