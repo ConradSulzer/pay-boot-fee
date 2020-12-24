@@ -26,6 +26,7 @@ body {
 
 .button-bank button {
   width: 150px;
+  margin-bottom: 16px;
 }
 
 .top-border {
@@ -51,3 +52,6 @@ body {
 .email-details {
   margin-bottom: 16px;
 }
+
+
+/* Payment information================================= */

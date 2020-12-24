@@ -21,6 +21,7 @@
     "express-session": "^1.17.1",
     "mongodb": "^3.6.3",
     "mongoose": "^5.11.5",
+    "stripe": "^8.129.0",
     "uuid": "^8.3.2",
     "validator": "^13.5.2"
   },

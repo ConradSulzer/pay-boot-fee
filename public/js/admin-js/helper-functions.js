@@ -11,6 +11,8 @@ const app = {
                     body: JSON.stringify(data)
                 });
 
+                console.log(response)
+
                 if (!response.ok) {
                     return window.location.href = '/admin/login';
                 }
@@ -255,5 +257,40 @@ const app = {
         const method = 'POST';
         
         const sendData = await this.sendData(where, method, data);
+    },
+
+    changePrice: async function (elem) {
+        const mainDiv = document.getElementById('changeBootFee')
+        const inputs = mainDiv.querySelectorAll('input');
+        const errorMessages = [];
+        const data = {};
+        const where = `/admin/prices`;
+        const method = 'POST';
+
+        inputs.forEach((input) => {
+            if (input.value === '') {
+                errorMessages.push({
+                    message: `${input.name} is required`,
+                    alert: 'alert-danger'
+                });
+            } else {
+                data[input.name] = input.value.trim()
+            }
+
+        });
+
+        if (errorMessages.length !== 0) {
+            this.formPrintMessage(errorMessages);
+        } else {
+            const sendData = await this.sendData(where, method, data)
+            if (sendData === 'ok') {
+                inputs.forEach((input) => {
+                    input.value = '';
+                });
+                console.log('Im OK')
+                $('#currentFee').html(`Current Fee: $${data.fee}`);
+                $('#currentDeposit').html(`Current Deposit: $${data.deposit}`);
+            }
+        }
     }
 }
