@@ -4,6 +4,7 @@ const validator = require('validator')
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const payAuth = require('../middleware/pay-auth');
 const Boot = require('../models/boot-model');
+const fixZeros = require('../resources/fixZeros');
 
 // GET request==========================================================================
 // ======================================================================================
@@ -21,8 +22,24 @@ router.get('/user-info', payAuth, (req, res) => {
             plate: boot.plate
         }
     })
-})
+});
 
+router.get('/pay', payAuth, (req, res) => {
+    const { fee, deposit } = require('../fees.json');
+    
+    const total = fixZeros(fee, deposit); 
+
+    res.render('frontend/pay', {
+        fee,
+        deposit,
+        total
+    });
+});
+
+router.get('/cancel', (req, res) => {
+    req.session.destroy();
+    res.status(200).redirect('/');
+});
 // POST request==========================================================================
 // ======================================================================================
 router.post('/validate-boot', async (req, res) => {
@@ -87,9 +104,7 @@ router.post('/user-info', payAuth, async (req, res) => {
     req.session.lastname = lastname;
     req.session.email = email;
 
-    console.log(req.session);
-
-    res.status(200).send('completed successfully');
+    res.status(200).redirect('/pay');
 })
 
 router.post("/payment-intent", async (req, res) => {

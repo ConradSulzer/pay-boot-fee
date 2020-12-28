@@ -55,3 +55,10 @@ body {
 
 
 /* Payment information================================= */
+ .amount-row {
+   font-size: 16px;
+ }
+
+ .item-total-row {
+   font-size: 16px;
+ }
