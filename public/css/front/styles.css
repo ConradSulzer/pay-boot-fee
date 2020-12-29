@@ -56,9 +56,21 @@ body {
 
 /* Payment information================================= */
  .amount-row {
-   font-size: 16px;
+  font-weight: 600;
+  color: dodgerblue;
+  font-size: 26px;
+  margin-bottom: -16px;
  }
 
  .item-total-row {
    font-size: 16px;
+   margin-bottom: -16px;
+ }
+
+ .line-divider {
+  margin-top: 16px;
+ }
+
+ .pay-row {
+   margin-bottom: 12px;
  }

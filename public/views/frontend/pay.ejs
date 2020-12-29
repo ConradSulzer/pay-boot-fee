@@ -1,90 +1,92 @@
 <%- include('../partials/frontend/head.ejs') %>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
-    </head>
+<!--Stripe  -->
+<script src="https://js.stripe.com/v3/"></script>
+</head>
 
-    <body>
-        <div class="container">
-            <div class="input-card">
-                <div class="card-title">
-                    <h4>Payment Data</h4>
+<body>
+    <div class="container">
+        <div class="input-card">
+            <div class="card-title">
+                <h4>Payment</h4>
+            </div>
+            <div class="row line-divider">
+                <div class="col-4"></div>
+                <div class="col-4 top-border"></div>
+                <div class="col-4"></div>
+            </div>
+            <div>
+                <div class="row item-total-row">
+                    <div class="col">
+                        <p>Boot Fee</p>
+                    </div>
                 </div>
-                <div class="row line-divider">
-                    <div class="col-4"></div>
-                    <div class="col-4 top-border"></div>
-                    <div class="col-4"></div>
+                <div class="row amount-row">
+                    <div class="col">
+                        <p>$<%= fee %>
+                        </p>
+                    </div>
                 </div>
-                <div>
-                    <div class="row item-total-row">
-                        <div class="col">
-                            <p>Boot Fee</p>
-                        </div>
+                <div class="row item-total-row">
+                    <div class="col">
+                        <p>Security Deposit*</p>
                     </div>
-                    <div class="row amount-row">
-                        <div class="col">
-                            <p>$<%= fee %></p>
-                        </div>
+                </div>
+                <div class="row amount-row">
+                    <div class="col">
+                        <p>$<%= deposit %>
+                        </p>
                     </div>
-                    <div class="row item-total-row">
-                        <div class="col">
-                            <p>Security Deposit*</p>
-                        </div>
+                </div>
+                <div class="row item-total-row">
+                    <div class="col">
+                        <p>Total Amount</p>
                     </div>
-                    <div class="row amount-row">
-                        <div class="col">
-                            <p>$<%= deposit %></p>
-                        </div>
+                </div>
+                <div class="row amount-row">
+                    <div class="col">
+                        <p>$<%= total %>
+                        </p>
                     </div>
-                    <div class="row item-total-row">
-                        <div class="col">
-                            <p>Total Amount</p>
-                        </div>
+                </div>
+                <small>*Deposits are refunded once boot is collected undamaged</small>
+            </div>
+
+            <div class="row line-divider">
+                <div class="col-4"></div>
+                <div class="col-4 top-border"></div>
+                <div class="col-4"></div>
+            </div>
+            <!-- Stripe -->
+
+            <form id="paymentForm" data-key="<%= pubKey %>">
+                <div class="row pay-row">
+                    <div class="col">
+                        <div id="cardNumber" class="form-control"></div>
                     </div>
-                    <div class="row amount-row">
-                        <div class="col">
-                            <p>$<%= total %></p>
-                        </div>
+                </div>
+                <div class="row pay-row">
+                    <div class="col">
+                        <div id="cardExpiry" class="form-control"></div>
                     </div>
-                    <small>*Refunded once boot is collected undamaged</small>
+                    <div class="col">
+                        <div id="cardCvc" class="form-control"></div>
+                    </div>
+                </div>
+                <div class="row pay-row">
+                    <div class="col">
+                        <div id="postalCode" class="form-control"></div>
+                    </div>
+                    <div class="col"></div>
                 </div>
                 
-                <div class="row line-divider">
-                    <div class="col-4"></div>
-                    <div class="col-4 top-border"></div>
-                    <div class="col-4"></div>
-                </div>
-                <form action="/user-info" method="POST">
-                    <div>
-                        <label for="firstname">First name</label>
-                        <input type="text" id="firstname" name="firstname" class="form-control boot-input"
-                            placeholder="Enter first name...">
-                    </div>
-                    <div>
-                        <label for="lastname">Last name</label>
-                        <input type="text" id="lastname" name="lastname" class="form-control boot-input"
-                            placeholder="Enter last name..."> 
-                    </div>
-                    <div>
-                        <label< for="email">Email</label>
-                        <input type="text" id="email" name="email" class="form-control" placeholder="Enter email..."
-                            >
-                        <small class="">Your unlock code will be sent here!</small>
-                    </div>
-                    <div class="button-bank">
-                        <button type="button" class="btn btn-danger btn-cancel">Back</button>
-                        <button type="submit" class="btn btn-primary boot-id-next">Next</button>
-                    </div>
-                    <% if (typeof messages !== 'undefined') {%>
-                        <% messages.forEach((message) => { %>
-                            <div class="alert alert-danger"><%= message %></div>
-                        <% }) %>
-                    <% } %>
-                </form>
-            </div>
+                <div id="card-errors" role="alert"></div>
+                <button id="submit" class="btn btn-primary">Submit Payment</button>
+            </form>
+
         </div>
+    </div>
+</body>
 
-
-    </body>
-
-    <%- include('../partials/frontend/foot.ejs') %>
-
-        </footer>
+<%- include('../partials/frontend/foot.ejs') %>
+<script src="../../js/front-js/stripeApp.js"></script>
+</footer>

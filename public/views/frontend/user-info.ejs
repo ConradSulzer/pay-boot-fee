@@ -67,7 +67,7 @@
                         <small class="">Your unlock code will be sent here!</small>
                     </div>
                     <div class="button-bank">
-                        <button type="button" class="btn btn-danger btn-cancel">Cancel</button>
+                        <button type="button" class="btn btn-danger btn-cancel" onclick="app.cancel()">Cancel</button>
                         <button type="submit" class="btn btn-primary boot-id-next">Next</button>
                     </div>
                     <% if (typeof messages !== 'undefined') {%>
@@ -83,5 +83,5 @@
     </body>
 
     <%- include('../partials/frontend/foot.ejs') %>
-
+    <script src="../../js/front-js/app.js"></script>
         </footer>

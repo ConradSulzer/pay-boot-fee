@@ -32,7 +32,9 @@ router.get('/pay', payAuth, (req, res) => {
     res.render('frontend/pay', {
         fee,
         deposit,
-        total
+        total,
+        clientSecret: req.session.clientSecret,
+        pubKey: process.env.STRIPE_PUBLISHABLE_KEY
     });
 });
 
@@ -40,6 +42,26 @@ router.get('/cancel', (req, res) => {
     req.session.destroy();
     res.status(200).redirect('/');
 });
+
+router.get('/payment-intent', payAuth, async (req, res) => {
+    const { fee, deposit } = require('../fees.json');
+    const amount = (parseFloat(fee) + parseFloat(deposit));
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: "usd"
+    });
+
+    req.session.clientSecret = paymentIntent.client_secret;
+    req.session.paymentIntent = paymentIntent;
+
+    res.redirect('/pay');
+  });
+
+  router.get('/client-secret', payAuth, (req, res) => {
+      console.log(req.session.clientSecret);
+    res.status(200).send({clientSecret: req.session.clientSecret})
+  })
 // POST request==========================================================================
 // ======================================================================================
 router.post('/validate-boot', async (req, res) => {
@@ -69,8 +91,6 @@ router.post('/validate-boot', async (req, res) => {
             });
         }
     }
-
-    res.redirect('/user-info');
 });
 
 router.post('/user-info', payAuth, async (req, res) => {
@@ -104,19 +124,9 @@ router.post('/user-info', payAuth, async (req, res) => {
     req.session.lastname = lastname;
     req.session.email = email;
 
-    res.status(200).redirect('/pay');
+    res.status(200).redirect('/payment-intent');
 })
 
-router.post("/payment-intent", async (req, res) => {
-    const { items } = req.body;
-    // Create a PaymentIntent with the order amount and currency
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: '',
-      currency: "usd"
-    });
-    res.send({
-      clientSecret: paymentIntent.client_secret
-    });
-  });
+
 
 module.exports = router;
