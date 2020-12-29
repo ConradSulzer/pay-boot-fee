@@ -26,6 +26,7 @@ router.get('/user-info', payAuth, (req, res) => {
 });
 
 router.get('/pay', payAuth, (req, res) => {
+    console.log(req.session);
     const { fee, deposit } = require('../fees.json');
     
     const total = fixZeros(fee, deposit); 
@@ -62,25 +63,6 @@ router.get('/payment-fail', payAuth, (req, res) => {
         message
     })
 })
-// router.get('/payment-intent', payAuth, async (req, res) => {
-//     const { fee, deposit } = require('../fees.json');
-//     const amount = (parseFloat(fee) + parseFloat(deposit));
-
-//     const paymentIntent = await stripe.paymentIntents.create({
-//       amount,
-//       currency: "usd"
-//     });
-
-//     req.session.clientSecret = paymentIntent.client_secret;
-//     req.session.paymentIntent = paymentIntent;
-
-//     res.redirect('/pay');
-//   });
-
-//   router.get('/client-secret', payAuth, (req, res) => {
-//       console.log(req.session.clientSecret);
-//     res.status(200).send({clientSecret: req.session.clientSecret})
-//   })
 // POST request==========================================================================
 // ======================================================================================
 router.post('/validate-boot', async (req, res) => {
@@ -113,19 +95,16 @@ router.post('/validate-boot', async (req, res) => {
 });
 
 router.post('/user-info', payAuth, async (req, res) => {
+    console.log(req.body);
     const errorMessages = [];
-    const { firstname, lastname, email } = req.body;
-
-    if (firstname === '' || lastname === '') {
-        errorMessages.push('Error: Must enter name!');
-    }
-
-    if (!validator.isAlpha(firstname) || !validator.isAlpha(lastname)) {
-        errorMessages.push('Error: Name can only contain letters (a-zA-Z)!');
-    }
+    const { email, confirmEmail } = req.body;
 
     if (!validator.isEmail(email)) {
         errorMessages.push('Error: Email address is invalid!');
+    }
+
+    if(email !== confirmEmail) {
+        errorMessages.push('Error: Email address do not match!')
     }
 
     if (errorMessages.length > 0) {
@@ -139,8 +118,6 @@ router.post('/user-info', payAuth, async (req, res) => {
         })
     }
 
-    req.session.firstname = firstname;
-    req.session.lastname = lastname;
     req.session.email = email;
 
     res.status(200).redirect('/pay');
@@ -159,6 +136,7 @@ router.post('/charge', payAuth, async (req, res) => {
 
         if(charge.status === 'succeeded') {
             req.session.paidAuth = true;
+            req.session.paidTime = new Date();
             res.redirect('/payment-complete')
         }
 

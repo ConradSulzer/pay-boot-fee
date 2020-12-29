@@ -1,87 +1,88 @@
 <%- include('../partials/frontend/head.ejs') %>
 
-    </head>
+</head>
 
-    <body>
-        <div class="container">
-            <div class="input-card">
-                <div class="card-title">
-                    <h4>Vehicle Details</h4>
+<body>
+    <div class="container">
+        <div class="input-card">
+            <div class="card-title">
+                <h4>Vehicle Details</h4>
+            </div>
+            <div class="row line-divider">
+                <div class="col-4"></div>
+                <div class="col-4 top-border"></div>
+                <div class="col-4"></div>
+            </div>
+            <div>
+                <div class="row details-row">
+                    <div class="col">
+                        <p><strong>Make:</strong></p>
+                    </div>
+                    <div class="col">
+                        <p><strong>Model:</strong></p>
+                    </div>
                 </div>
-                <div class="row line-divider">
-                    <div class="col-4"></div>
-                    <div class="col-4 top-border"></div>
-                    <div class="col-4"></div>
+                <div class="row details-row">
+                    <div class="col">
+                        <p>
+                            <%= boot.make %>
+                                </5>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p>
+                            <%= boot.model %>
+                        </p>
+                    </div>
+                </div>
+                <div class="row details-row">
+                    <div class="col">
+                        <p><strong>License Plate:</strong></p>
+                    </div>
+                    <div class="col">
+                        <p>
+                            <%= boot.plate %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row disclaimer-text">
+                <small>Be sure the above details match the vehicle you are trying to remove
+                    the boot from. If not, click 'Cancel' and re-enter your boot ID.</small>
+            </div>
+            <div class="row line-divider">
+                <div class="col-4"></div>
+                <div class="col-4 top-border"></div>
+                <div class="col-4"></div>
+            </div>
+            <form action="/user-info" method="POST">
+                <div class="bottom-space">
+                    <label< for="email">Email</label>
+                    <input type="text" id="email" name="email" class="form-control" placeholder="Enter email..." required>
+                    <small style="margin-bottom: 12px;">Your unlock code will be sent here!</small>
                 </div>
                 <div>
-                    <div class="row details-row">
-                        <div class="col">
-                            <p><strong>Make:</strong></p>
-                        </div>
-                        <div class="col">
-                            <p><strong>Model:</strong></p>
-                        </div>
-                    </div>
-                    <div class="row details-row">
-                        <div class="col">
-                            <p><%= boot.make %></5>
-                            </p>
-                        </div>
-                        <div class="col">
-                            <p><%= boot.model %></p>
-                        </div>
-                    </div>
-                    <div class="row details-row">
-                        <div class="col">
-                            <p><strong>License Plate:</strong></p>
-                        </div>
-                        <div class="col">
-                            <p><%= boot.plate %></p>
-                        </div>
-                    </div>
+                    <label< for="confirmEmail">Confirm Email</label>
+                    <input type="text" id="confirmEmail" name="confirmEmail" class="form-control" placeholder="Re-enter email..." required>
                 </div>
-                <div class="row disclaimer-text">
-                    <small class="email-details">Be sure the above details match the vehicle you are trying to remove
-                        the boot from. If not, click 'Cancel' and re-enter your boot ID.</small>
+                <div class="button-bank">
+                    <a href="/cancel">
+                        <button type="button" class="btn btn-danger btn-cancel">Cancel</button>
+                    </a>
+                    <button type="submit" class="btn btn-primary boot-id-next">Next</button>
                 </div>
-                <div class="row line-divider">
-                    <div class="col-4"></div>
-                    <div class="col-4 top-border"></div>
-                    <div class="col-4"></div>
-                </div>
-                <form action="/user-info" method="POST">
-                    <div>
-                        <label for="firstname">First name</label>
-                        <input type="text" id="firstname" name="firstname" class="form-control boot-input"
-                            placeholder="Enter first name...">
+                <% if (typeof messages !=='undefined' ) {%>
+                    <% messages.forEach((message)=> { %>
+                    <div class="alert alert-danger">
+                        <%= message %>
                     </div>
-                    <div>
-                        <label for="lastname">Last name</label>
-                        <input type="text" id="lastname" name="lastname" class="form-control boot-input"
-                            placeholder="Enter last name..."> 
-                    </div>
-                    <div>
-                        <label< for="email">Email</label>
-                        <input type="text" id="email" name="email" class="form-control" placeholder="Enter email..."
-                            >
-                        <small class="">Your unlock code will be sent here!</small>
-                    </div>
-                    <div class="button-bank">
-                        <button type="button" class="btn btn-danger btn-cancel" onclick="app.cancel()">Cancel</button>
-                        <button type="submit" class="btn btn-primary boot-id-next">Next</button>
-                    </div>
-                    <% if (typeof messages !== 'undefined') {%>
-                        <% messages.forEach((message) => { %>
-                            <div class="alert alert-danger"><%= message %></div>
-                        <% }) %>
-                    <% } %>
-                </form>
-            </div>
+                    <% }) %>
+                <% } %>
+            </form>
         </div>
+    </div>
+</body>
 
+<%- include('../partials/frontend/foot.ejs') %>
 
-    </body>
-
-    <%- include('../partials/frontend/foot.ejs') %>
-    <script src="../../js/front-js/app.js"></script>
-        </footer>
+</footer>
