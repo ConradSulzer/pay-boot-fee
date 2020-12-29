@@ -3,6 +3,7 @@ const router = new express.Router();
 const validator = require('validator')
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const payAuth = require('../middleware/pay-auth');
+const paidAuth = require('../middleware/paid-auth');
 const Boot = require('../models/boot-model');
 const fixZeros = require('../resources/fixZeros');
 
@@ -29,11 +30,16 @@ router.get('/pay', payAuth, (req, res) => {
     
     const total = fixZeros(fee, deposit); 
 
+    req.session.chargeAmount = {
+        fee: parseFloat(fee) * 100,
+        deposit: parseFloat(deposit) * 100,
+        total: parseFloat(total) * 100,
+    }
+
     res.render('frontend/pay', {
         fee,
         deposit,
         total,
-        clientSecret: req.session.clientSecret,
         pubKey: process.env.STRIPE_PUBLISHABLE_KEY
     });
 });
@@ -43,25 +49,38 @@ router.get('/cancel', (req, res) => {
     res.status(200).redirect('/');
 });
 
-router.get('/payment-intent', payAuth, async (req, res) => {
-    const { fee, deposit } = require('../fees.json');
-    const amount = (parseFloat(fee) + parseFloat(deposit));
+router.get('/payment-complete', payAuth, paidAuth, (req, res) => {
+    const unlock = req.session.boot.unlock
+    res.status(200).render('frontend/payment-complete', {
+        unlock
+    })
+})
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-      currency: "usd"
-    });
+router.get('/payment-fail', payAuth, (req, res) => {
+    const message = req.session.paymentErrorMessage
+    res.status(200).render('frontend/payment-fail', {
+        message
+    })
+})
+// router.get('/payment-intent', payAuth, async (req, res) => {
+//     const { fee, deposit } = require('../fees.json');
+//     const amount = (parseFloat(fee) + parseFloat(deposit));
 
-    req.session.clientSecret = paymentIntent.client_secret;
-    req.session.paymentIntent = paymentIntent;
+//     const paymentIntent = await stripe.paymentIntents.create({
+//       amount,
+//       currency: "usd"
+//     });
 
-    res.redirect('/pay');
-  });
+//     req.session.clientSecret = paymentIntent.client_secret;
+//     req.session.paymentIntent = paymentIntent;
 
-  router.get('/client-secret', payAuth, (req, res) => {
-      console.log(req.session.clientSecret);
-    res.status(200).send({clientSecret: req.session.clientSecret})
-  })
+//     res.redirect('/pay');
+//   });
+
+//   router.get('/client-secret', payAuth, (req, res) => {
+//       console.log(req.session.clientSecret);
+//     res.status(200).send({clientSecret: req.session.clientSecret})
+//   })
 // POST request==========================================================================
 // ======================================================================================
 router.post('/validate-boot', async (req, res) => {
@@ -124,7 +143,36 @@ router.post('/user-info', payAuth, async (req, res) => {
     req.session.lastname = lastname;
     req.session.email = email;
 
-    res.status(200).redirect('/payment-intent');
+    res.status(200).redirect('/pay');
+})
+
+router.post('/charge', payAuth, async (req, res) => {
+    const token = req.body.stripeToken
+
+    try {
+        const charge = await stripe.charges.create({
+            amount: req.session.chargeAmount.total,
+            currency: 'usd',
+            description: 'Boot fee and deposit',
+            source: token  
+        });
+
+        if(charge.status === 'succeeded') {
+            req.session.paidAuth = true;
+            res.redirect('/payment-complete')
+        }
+
+    }catch (err) {
+        if(err) {
+            console.log(err);
+            req.session.paymentErrorMessage = err.raw.message
+            res.status(200).redirect('/payment-fail')
+        }
+    }
+
+    
+
+    
 })
 
 

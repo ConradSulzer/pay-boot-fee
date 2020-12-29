@@ -1,6 +1,6 @@
 const stripeApp = {
     init: function () {
-        this.paymentElements();
+        this.paymentElement();
         this.eventListeners();
     },
 
@@ -13,83 +13,88 @@ const stripeApp = {
             } else {
                 displayError.textContent = '';
             }
-        });
-
-        $('#paymentForm').on('submit', async function (e) {
-            e.preventDefault();
-            stripeApp.confirmPayment();
-        })         
+        });        
     },
 
-    getClientSecret: function () {
-      return new Promise(async (resolve, reject) => {
-        try {
-            const response = await fetch(location.origin + '/client-secret', { method: 'GET'});
-            json = await response.json();
+    // getClientSecret: function () {
+    //   return new Promise(async (resolve, reject) => {
+    //     try {
+    //         const response = await fetch(location.origin + '/client-secret', { method: 'GET'});
+    //         json = await response.json();
 
-            return resolve(json.clientSecret);
-        } catch (e) {
-            console.log(e);
-            reject(e);
-        }
-      });
-    },
+    //         return resolve(json.clientSecret);
+    //     } catch (e) {
+    //         console.log(e);
+    //         reject(e);
+    //     }
+    //   });
+    // },
 
-    confirmPayment: async function () {
+    // confirmPayment: async function () {
+    //     const pubKey = $('#paymentForm').data('key');
+    //     const stripe = Stripe(pubKey);
+    //     const clientSecret = await stripeApp.getClientSecret();
+           
+    //     stripeResult = await stripe.confirmCardPayment(clientSecret, {
+    //         payment_method: {
+    //             card: card,
+    //             billing_details: {
+    //                 address: {
+    //                     postal_code: $('#postalCode')
+    //                 }
+    //                 }
+    //         }
+    //     });
+
+    //     if(stripeResult.error) {
+    //         console.log('Stripe Error', stripeResult.error);
+    //     } else {
+    //         if(stripeResult.paymentIntent.status === 'suceeded'){
+    //             console.log('Payment Success');
+    //         }
+    //     }
+    // },
+
+    paymentElement: function () {
         const pubKey = $('#paymentForm').data('key');
-        const stripe = Stripe(pubKey);
-        const clientSecret = await stripeApp.getClientSecret();
-        const card = {
-            cardNumber: $('#cardNumber'),
-            cardCvc: $('#cardCvc'),
-            cardExpiry: $('cardExpiry')
-        }
-            
-        stripeResult = await stripe.confirmCardPayment(clientSecret, {
-            payment_method: {
-                card: card,
-                billing_details: {
-                    address: {
-                        postal_code: $('#postalCode')
-                    }
-                    }
-            }
-        });
-
-        if(stripeResult.error) {
-            console.log('Stripe Error', stripeResult.error);
-        } else {
-            if(stripeResult.paymentIntent.status === 'suceeded'){
-                console.log('Payment Success');
-            }
-        }
-    },
-
-    paymentElements: function () {
-        const pubKey = $('#paymentForm').data('key');
-        console.log('PubKey', pubKey);
         const stripe = Stripe(pubKey);
         const elements = stripe.elements();
 
         var style = {
             base: {
-                lineHeight: '1.429',
                 color: "#32325d",
 
             }
         };
 
-        const cardNumber = elements.create('cardNumber', { style });
-        cardNumber.mount('#cardNumber');
+        const card = elements.create('card', {style: style});
+        card.mount('#card-element');
+        
+        $('#paymentForm').on('submit', async function (event) {
+            event.preventDefault();
 
-        const cardExpiry = elements.create('cardExpiry', { style });
-        cardExpiry.mount('#cardExpiry');
+            const result = await stripe.createToken(card);
 
-        const cardCvc = elements.create('cardCvc', { style, placeholder: 'CVC' });
-        cardCvc.mount('#cardCvc');
+            if(result.error) {
+                // Show customer an error
+                console.log(result.error);
+            } else {
+                stripeApp.tokenHandler(result.token);
+            }
+        });
 
-        const postalCode = elements.create('postalCode', { style, placeholder: 'Zip code' });
-        postalCode.mount('#postalCode');
+    },
+
+    tokenHandler: function (token) {
+        const form = document.getElementById('paymentForm');
+
+        const hiddenInput = document.createElement('input');
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'stripeToken');
+        hiddenInput.setAttribute('value', token.id);
+        form.appendChild(hiddenInput);
+
+        form.submit();
     }
 }
 
