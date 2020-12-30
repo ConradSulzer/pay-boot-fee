@@ -163,6 +163,13 @@ router.delete('/admin/delete-agent', auth, isAdmin, async (req, res) => {
                 return res.send([{
                     message: 'Unable to remove user!',
                     alert: 'alert-danger'
+                }]);
+            }
+
+            if(doc === null) {
+                return res.send([{
+                    message: 'User does not exist',
+                    alert: 'alert-danger'
                 }])
             }
 

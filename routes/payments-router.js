@@ -5,8 +5,9 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const payAuth = require('../middleware/pay-auth');
 const paidAuth = require('../middleware/paid-auth');
 const Boot = require('../models/boot-model');
-const fixZeros = require('../resources/fixZeros');
+const fixZeros = require('../resources/fix-zeros');
 const { sendReceiptUser, sendPaymentRecord } = require('../resources/emails/payment-success')
+const checkinBoot = require('../resources/checkin-boot');
 
 // GET request==========================================================================
 // ======================================================================================
@@ -55,13 +56,18 @@ router.get('/cancel', (req, res) => {
     res.status(200).redirect('/');
 });
 
-router.get('/payment-complete', payAuth, paidAuth, (req, res) => {
+router.get('/payment-complete', payAuth, paidAuth, async (req, res) => {
     const unlock = req.session.boot.unlock;
     sendReceiptUser(req.session);
     sendPaymentRecord(req.session);
+
     res.status(200).render('frontend/payment-complete', {
         unlock
-    })
+    });
+
+    checkinBoot(req.session.boot['_id']);
+
+    req.session.destroy();
 })
 
 router.get('/payment-fail', payAuth, (req, res) => {
@@ -78,7 +84,7 @@ router.post('/validate-boot', async (req, res) => {
     try {
         const boot = await Boot.findOne({ bootId });
 
-        if (boot === null || !boot.deployed) {
+        if (boot === null || !boot.deployed || boot.paid) {
             return res.status(200).render('frontend/index', {
                 message: 'Boot is not available for payment'
             });
@@ -132,7 +138,7 @@ router.post('/user-info', payAuth, async (req, res) => {
 
 router.post('/charge', payAuth, async (req, res) => {
     const token = req.body.stripeToken
-
+    
     try {
         const charge = await stripe.charges.create({
             amount: req.session.chargeAmount.total,
