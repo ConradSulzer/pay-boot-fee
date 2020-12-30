@@ -66,11 +66,11 @@ const bootSchema = new mongoose.Schema({
         required: true,
         set: v => v === '' ? 'None' : v
     },
-    notes: [{
+    notes: {
         type: Array,
         required: true,
         set: v => v === '' ? [] : v
-    }]
+    }
 });
 
 

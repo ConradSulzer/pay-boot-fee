@@ -6,6 +6,7 @@ const payAuth = require('../middleware/pay-auth');
 const paidAuth = require('../middleware/paid-auth');
 const Boot = require('../models/boot-model');
 const fixZeros = require('../resources/fixZeros');
+const { sendReceiptUser, sendPaymentRecord } = require('../resources/emails/payment-success')
 
 // GET request==========================================================================
 // ======================================================================================
@@ -29,7 +30,11 @@ router.get('/pay', payAuth, (req, res) => {
     console.log(req.session);
     const { fee, deposit } = require('../fees.json');
     
-    const total = fixZeros(fee, deposit); 
+    const total = fixZeros((parseFloat(fee) + parseFloat(deposit)).toString());
+
+    req.session.fee = fee;
+    req.session.deposit = deposit;
+    req.session.total = total;
 
     req.session.chargeAmount = {
         fee: parseFloat(fee) * 100,
@@ -51,7 +56,9 @@ router.get('/cancel', (req, res) => {
 });
 
 router.get('/payment-complete', payAuth, paidAuth, (req, res) => {
-    const unlock = req.session.boot.unlock
+    const unlock = req.session.boot.unlock;
+    sendReceiptUser(req.session);
+    sendPaymentRecord(req.session);
     res.status(200).render('frontend/payment-complete', {
         unlock
     })
@@ -95,7 +102,6 @@ router.post('/validate-boot', async (req, res) => {
 });
 
 router.post('/user-info', payAuth, async (req, res) => {
-    console.log(req.body);
     const errorMessages = [];
     const { email, confirmEmail } = req.body;
 
@@ -117,7 +123,8 @@ router.post('/user-info', payAuth, async (req, res) => {
             }
         })
     }
-
+    console.log('EMAIL:', email);
+    console.log('SESSION', req.session);
     req.session.email = email;
 
     res.status(200).redirect('/pay');
@@ -137,6 +144,7 @@ router.post('/charge', payAuth, async (req, res) => {
         if(charge.status === 'succeeded') {
             req.session.paidAuth = true;
             req.session.paidTime = new Date();
+            req.session.charge = charge
             res.redirect('/payment-complete')
         }
 
@@ -147,10 +155,6 @@ router.post('/charge', payAuth, async (req, res) => {
             res.status(200).redirect('/payment-fail')
         }
     }
-
-    
-
-    
 })
 
 

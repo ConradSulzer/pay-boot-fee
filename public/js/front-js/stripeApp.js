@@ -16,45 +16,6 @@ const stripeApp = {
         });        
     },
 
-    // getClientSecret: function () {
-    //   return new Promise(async (resolve, reject) => {
-    //     try {
-    //         const response = await fetch(location.origin + '/client-secret', { method: 'GET'});
-    //         json = await response.json();
-
-    //         return resolve(json.clientSecret);
-    //     } catch (e) {
-    //         console.log(e);
-    //         reject(e);
-    //     }
-    //   });
-    // },
-
-    // confirmPayment: async function () {
-    //     const pubKey = $('#paymentForm').data('key');
-    //     const stripe = Stripe(pubKey);
-    //     const clientSecret = await stripeApp.getClientSecret();
-           
-    //     stripeResult = await stripe.confirmCardPayment(clientSecret, {
-    //         payment_method: {
-    //             card: card,
-    //             billing_details: {
-    //                 address: {
-    //                     postal_code: $('#postalCode')
-    //                 }
-    //                 }
-    //         }
-    //     });
-
-    //     if(stripeResult.error) {
-    //         console.log('Stripe Error', stripeResult.error);
-    //     } else {
-    //         if(stripeResult.paymentIntent.status === 'suceeded'){
-    //             console.log('Payment Success');
-    //         }
-    //     }
-    // },
-
     paymentElement: function () {
         const pubKey = $('#paymentForm').data('key');
         const stripe = Stripe(pubKey);
@@ -73,7 +34,9 @@ const stripeApp = {
         $('#paymentForm').on('submit', async function (event) {
             event.preventDefault();
 
-            const result = await stripe.createToken(card);
+            const data = stripeApp.grabCardData();
+
+            const result = await stripe.createToken(card, data);
 
             if(result.error) {
                 // Show customer an error
@@ -95,6 +58,17 @@ const stripeApp = {
         form.appendChild(hiddenInput);
 
         form.submit();
+    },
+
+    grabCardData() {
+        const data = {}
+        const x = $("#paymentForm").find(".card-info")
+
+        $(x).each((index) => {
+            data[x[index].id] = $(x[index]).val();
+        })
+
+        return data
     }
 }
 
