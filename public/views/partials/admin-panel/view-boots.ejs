@@ -60,7 +60,7 @@
                     </div>
                     <p class="boot-bar"><%= boot.bootId %></p>
                     <div class="status-div">
-                        <p class="boot-bar"><%= boot.status %></p>
+                        <p class="boot-bar boot-status"><%= boot.status %></p>
                         <div class="icon-contain">
                             <div class="icon-contain-middle">
                                 <i class="fas fa-money-bill-alt paid-icon <%= boot.paid ? 'active' : '' %>"></i>
@@ -91,12 +91,13 @@
                 </div>
                 <div class="addBootNote">
                     <div class="boot-notes">
-                        <p>Notes:</p>
-                        <% boot.notes.forEach(function(note){%>
-                            <p>-- <%= note %></p>
-                        <% }); %>
-                    </div>
-                    <input type="text" class="note-input">
+                        <div class="note-block">Notes:
+                            <% boot.notes.forEach(function(note){%>
+                                <p>-- <%= note %></p>
+                            <% }); %>
+                        </div>
+                    </div >
+                    <input type="text" class="note-input form-control" style="max-width: 300px;">
                     <button type="button" class="btn-sm btn-primary" onclick="app.addBootNote(this)"
                         data-id="<%= boot['_id'] %>">Add Note</button>
                 </div>

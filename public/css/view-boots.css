@@ -1,5 +1,6 @@
-/* Sliders==================================================== */
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
+/* Sliders==================================================== */
 .switch {
     position: relative;
     display: flex;
@@ -227,6 +228,14 @@ input:checked+.slider:before {
     float: right;
     margin-right: 20px;
     cursor: pointer;
+}
+
+.note-block {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 400;
+    line-height: 1.7em;
+    color: #999;
 }
 
 @media all and (min-width: 326px) and (max-width: 500px) {

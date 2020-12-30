@@ -124,7 +124,8 @@ router.post('/admin/prices', auth, isAdmin, async (req, res) => {
 
     res.status(200).send([{
         message: 'Price changed successfully',
-        alert: 'alert-success'
+        alert: 'alert-success',
+        status: 'success'
     }]);
 });
 

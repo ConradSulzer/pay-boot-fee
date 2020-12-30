@@ -11,18 +11,19 @@ const app = {
                     body: JSON.stringify(data)
                 });
 
-                console.log(response)
-
-                if (!response.ok) {
+                if (response.status === 403) {
                     return window.location.href = '/admin/login';
                 }
 
-                const json = await response.json()
-                this.formPrintMessage(json)
+                console.log(response);
 
-                resolve('ok');
-            } catch (e) {
-                console.log(e);
+                const json = await response.json();
+                this.formPrintMessage(json);
+
+                resolve(json[0].status);
+
+            } catch (err) {
+                console.log(err);
                 this.formPrintMessage([{
                     message: 'Error try again!',
                     alert: 'alert-danger'
@@ -74,7 +75,7 @@ const app = {
             this.formPrintMessage(errorMessages);
         } else {
             const sendData = await this.sendData(where, method, data)
-            if (sendData === 'ok') {
+            if (sendData === 'success') {
                 inputs.forEach((input) => {
                     input.value = '';
                 });
@@ -89,7 +90,7 @@ const app = {
 
         const sendData = await this.sendData(where, method, data);
 
-        if (sendData === 'ok') {
+        if (sendData === 'success') {
             $(elem).closest('li').css('display', 'none');
         }
     },
@@ -114,7 +115,7 @@ const app = {
 
         const sendData = await this.sendData(where, method, data);
 
-        if (sendData === 'ok') {
+        if (sendData === 'success') {
             $(elem).closest('div').toggle();
         }
     },
@@ -136,7 +137,7 @@ const app = {
 
         const sendData = await this.sendData(where, method, data);
 
-        if (sendData === 'ok') {
+        if (sendData === 'success') {
             $('#bootId').val('')
             $('#unlock').val('')
         }
@@ -166,7 +167,7 @@ const app = {
             this.formPrintMessage(errorMessages);
         } else {
             const sendData = await this.sendData(where, method, data)
-            if (sendData === 'ok') {
+            if (sendData === 'success') {
                 inputs.forEach((input) => {
                     input.value = '';
                 });
@@ -217,8 +218,9 @@ const app = {
         
         const sendData = await this.sendData(where, method, data);
 
-        if(sendData === 'ok') {
+        if(sendData === 'success') {
             $(elem).siblings('input').val('')
+            $(elem).siblings('.boot-notes').find('.note-block').append(`<p>-- ${note}</p>`);
         }
     },
 
@@ -230,13 +232,14 @@ const app = {
 
         const sendData = await this.sendData(where, method, data);
 
-        $(elem).closest('li').toggle();
+        if(sendData === 'success') {
+            $(elem).closest('li').hide();
+        }
     },
 
     checkinBoot: async function (elem) {
         const elemId = elem.id;
-        const bootId = elem.getAttribute('data.id') || $(elem).siblings('.form-group').find('input').val().trim()
-        console.log(bootId);
+        const bootId = $(elem).siblings('.form-group').find('#bootId').val().trim()
         const data = {
             action: elemId,
             bootId
@@ -245,11 +248,14 @@ const app = {
         const method = 'POST';
         
         const sendData = await this.sendData(where, method, data);
+
+        if(sendData === 'success') {
+            $(elem).siblings('.form-group').find('#bootId').val('');
+        }
     },
 
     removeFlag: async function (elem) {
         const bootId = elem.getAttribute('data.id')
-        console.log(bootId);
         const data = {
             bootId
         }
@@ -257,6 +263,13 @@ const app = {
         const method = 'POST';
         
         const sendData = await this.sendData(where, method, data);
+
+        console.log('sendData', sendData);
+
+        if(sendData === 'success') {
+            $(elem).hide();
+            $(elem).closest('li').find('.boot-status').text('Undeployed');
+        }
     },
 
     changePrice: async function (elem) {
@@ -283,11 +296,11 @@ const app = {
             this.formPrintMessage(errorMessages);
         } else {
             const sendData = await this.sendData(where, method, data)
-            if (sendData === 'ok') {
+
+            if (sendData === 'success') {
                 inputs.forEach((input) => {
                     input.value = '';
                 });
-                console.log('Im OK')
                 $('#currentFee').html(`Current Fee: $${data.fee}`);
                 $('#currentDeposit').html(`Current Deposit: $${data.deposit}`);
             }

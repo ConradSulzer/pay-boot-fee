@@ -49,6 +49,11 @@ app.use(frontRouter);
 app.use(bootRouter);
 app.use(agentRouter);
 
+//404 Page Handling----------------------------------------
+app.get('*', (req, res) => {
+    res.status(500).render('404')
+})
+
 //Server port assignment--------------------------------
 app.listen(PORT, () => {
     console.log(`Server up on port ${PORT}`);
