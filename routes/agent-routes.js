@@ -10,7 +10,7 @@ const fs = require('fs');
 // GET request===========================================================================
 // ======================================================================================
 router.get('/admin/dashboard', auth, (req, res) => {
-    res.render('admin/admin-dashboard', {
+    res.status(200).render('admin/admin-dashboard', {
         dashboardMainPartial: false,
         role: req.session.agent.role,
         message: `Welcome to the dashboard, ${req.session.agent.firstname}!`
@@ -19,7 +19,7 @@ router.get('/admin/dashboard', auth, (req, res) => {
 
 router.get('/admin/add-agent', auth, isAdmin, (req, res) => {
     if (req.headers.fetched === 'true') {
-        res.render('partials/admin-panel/add-agent', {
+        res.status(200).render('partials/admin-panel/add-agent', {
             formId: 'add-agent'
         });
     } else {
@@ -28,19 +28,25 @@ router.get('/admin/add-agent', auth, isAdmin, (req, res) => {
 });
 
 router.get('/admin/view-agents', auth, isAdmin, async (req, res) => {
-    const agents = await Agent.find({});
-    const dataArray = agents.map((agent) => {
-        const agentObj = agent.toObject()
+    try {
+        const agents = await Agent.find({});
 
-        delete agentObj.password;
-        delete agentObj['__v'];
+        const dataArray = agents.map((agent) => {
+            const agentObj = agent.toObject()
 
-        return agentObj
-    });
+            delete agentObj.password;
+            delete agentObj['__v'];
 
-    res.render('partials/admin-panel/view-agents', {
-        agents: dataArray
-    });
+            return agentObj
+        });
+
+        res.render('partials/admin-panel/view-agents', {
+            agents: dataArray
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).render('partials/admin-panel/module-unavailable');
+    }
 })
 
 router.get('/admin/prices', auth, isAdmin, (req, res) => {
@@ -61,6 +67,8 @@ router.get('/admin/prices', auth, isAdmin, (req, res) => {
 router.post('/admin/add-agent', auth, isAdmin, async (req, res) => {
     const data = req.body;
     const errorMessages = [];
+
+    // Validate data ------------------------
     if (!validator.isAlpha(data.firstname) || !validator.isAlpha(data.lastname)) {
         errorMessages.push({
             message: 'Names are letters only (a-zA-Z)',
@@ -76,21 +84,31 @@ router.post('/admin/add-agent', auth, isAdmin, async (req, res) => {
     }
 
     if (errorMessages.length > 0) {
-        res.send(JSON.stringify(errorMessages));
+        res.status(400).send(errorMessages);
         return
     }
 
-    // Create agent
-    const agent = new Agent({
-        username: data.username,
-        firstname: data.firstname,
-        lastname: data.lastname,
-        role: data.role
-    })
+    // Create user ------------------------
+    try {
+        const agent = new Agent({
+            username: data.username,
+            firstname: data.firstname,
+            lastname: data.lastname,
+            role: data.role
+        })
 
-    agent.password = await bcrypt.hash(data.password, 8);
+        agent.password = await bcrypt.hash(data.password, 8);
 
-    await agent.save((err, result) => {
+        await agent.save()
+
+        return res.status(201).send([{
+            message: 'Agent added successfully!',
+            alert: 'alert-success'
+        }]);
+
+    } catch (err) {
+        console.log(err);
+
         if (err) {
             if (err.code === 11000) {
                 return res.status(200).send([{
@@ -98,18 +116,13 @@ router.post('/admin/add-agent', auth, isAdmin, async (req, res) => {
                     alert: 'alert-danger'
                 }]);
             } else {
-                return res.status(200).send([{
+                return res.status(500).send([{
                     message: 'Cannot create user!',
                     alert: 'alert-danger'
                 }]);
             }
-        } else {
-            return res.status(200).send([{
-                message: 'Agent added successfully!',
-                alert: 'alert-success'
-            }]);
         }
-    });
+    }
 });
 
 router.post('/admin/prices', auth, isAdmin, async (req, res) => {
@@ -117,41 +130,51 @@ router.post('/admin/prices', auth, isAdmin, async (req, res) => {
 
     let dataString = JSON.stringify(data, null, 2);
 
-    fs.writeFile('fees.json', dataString, (err) => {
-        if (err) throw err;
-        console.log(err)
-    });
+    try {
+        fs.writeFile('fees.json', dataString, (err) => {
+            if (err) throw err;
+        });
 
-    res.status(200).send([{
-        message: 'Price changed successfully',
-        alert: 'alert-success',
-        status: 'success'
-    }]);
+        res.status(200).send([{
+            message: 'Price changed successfully',
+            alert: 'alert-success',
+            status: 'success'
+        }]);
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).send([{
+            message: 'Something went wrong, try again!',
+            alert: 'alert-danger',
+            status: 'fail'
+        }]);
+    }
 });
 
 // PUT request========================================================================
 // ======================================================================================
 router.put('/admin/edit-password', auth, isAdmin, async (req, res) => {
-    const password = await bcrypt.hash(req.body.password, 8)
     try {
-        await Agent.findByIdAndUpdate({ _id: req.body.agentId }, { $set: { password } }, (err, doc) => {
-            if (err || !doc) {
-                res.send([{
-                    message: 'Unable to edit password!',
-                    alert: 'alert-danger'
-                }]);
-            } else {
-                res.status(200).send([{
-                    message: 'Password successfully updated',
-                    alert: 'alert-success'
-                }]);
-            }
-        });
-    } catch (e) {
-        res.status(500).send([{
-            message: 'Unable to edit password!',
-            alert: 'alert-danger'
+        const password = await bcrypt.hash(req.body.password, 8);
+
+        await Agent.findByIdAndUpdate({ _id: req.body.agentId }, { $set: { password } });
+
+        res.status(200).send([{
+            message: 'Password successfully updated',
+            alert: 'alert-success',
+            status: 'success'
         }]);
+
+    } catch (err) {
+        console.log(err);
+
+        if(err) {
+            res.status(500).send([{
+                message: 'Unable to edit password!',
+                alert: 'alert-danger',
+                status: 'fail'
+            }]);
+        }
     }
 });
 
@@ -159,29 +182,32 @@ router.put('/admin/edit-password', auth, isAdmin, async (req, res) => {
 // ======================================================================================
 router.delete('/admin/delete-agent', auth, isAdmin, async (req, res) => {
     try {
-        await Agent.findByIdAndDelete(req.body.agentId, (err, doc) => {
-            if (err) {
-                return res.send([{
-                    message: 'Unable to remove user!',
-                    alert: 'alert-danger'
-                }]);
-            }
+        const doc = await Agent.findByIdAndDelete(req.body.agentId);
 
-            if(doc === null) {
-                return res.send([{
-                    message: 'User does not exist',
-                    alert: 'alert-danger'
-                }])
-            }
-
-            res.send([{
-                message: `${doc.username} was removed successfully!`,
-                alert: 'alert-success'
+        if (doc === null) {
+            return res.send([{
+                message: 'User does not exist',
+                alert: 'alert-danger',
+                status: 'fail'
             }])
+        }
 
-        });
-    } catch (e) {
-        console.log(e);
+        res.send([{
+            message: `${doc.username} was removed successfully!`,
+            alert: 'alert-success',
+            status: 'success'
+        }])
+
+    } catch (err) {
+        console.log(err);
+
+        if (err) {
+            return res.send([{
+                message: 'Unable to remove user!',
+                alert: 'alert-danger',
+                status: 'fail'
+            }]);
+        }
     }
 })
 

@@ -12,6 +12,11 @@ const checkinBoot = require('../resources/checkin-boot');
 // GET request==========================================================================
 // ======================================================================================
 router.get('/', (req, res) => {
+    if (req.query.action = 'false') {
+        res.status(200).render('frontend/index', {
+            message: 'Error: Enter Boot ID to continue!'
+        });
+    }
     res.status(200).render('frontend/index');
 });
 
@@ -30,7 +35,7 @@ router.get('/user-info', payAuth, (req, res) => {
 router.get('/pay', payAuth, (req, res) => {
     console.log(req.session);
     const { fee, deposit } = require('../fees.json');
-    
+
     const total = fixZeros((parseFloat(fee) + parseFloat(deposit)).toString());
 
     req.session.fee = fee;
@@ -72,6 +77,7 @@ router.get('/payment-complete', payAuth, paidAuth, async (req, res) => {
 
 router.get('/payment-fail', payAuth, (req, res) => {
     const message = req.session.paymentErrorMessage
+    req.session.paymentErrorMessage = null;
     res.status(200).render('frontend/payment-fail', {
         message
     })
@@ -86,7 +92,7 @@ router.post('/validate-boot', async (req, res) => {
 
         if (boot === null || !boot.deployed || boot.paid) {
             return res.status(200).render('frontend/index', {
-                message: 'Boot is not available for payment'
+                message: 'Boot is not available for payment!'
             });
         }
 
@@ -115,7 +121,7 @@ router.post('/user-info', payAuth, async (req, res) => {
         errorMessages.push('Error: Email address is invalid!');
     }
 
-    if(email !== confirmEmail) {
+    if (email !== confirmEmail) {
         errorMessages.push('Error: Email address do not match!')
     }
 
@@ -138,31 +144,29 @@ router.post('/user-info', payAuth, async (req, res) => {
 
 router.post('/charge', payAuth, async (req, res) => {
     const token = req.body.stripeToken
-    
+
     try {
         const charge = await stripe.charges.create({
             amount: req.session.chargeAmount.total,
             currency: 'usd',
             description: 'Boot fee and deposit',
-            source: token  
+            source: token
         });
 
-        if(charge.status === 'succeeded') {
+        if (charge.status === 'succeeded') {
             req.session.paidAuth = true;
             req.session.paidTime = new Date();
             req.session.charge = charge
             res.redirect('/payment-complete')
         }
 
-    }catch (err) {
-        if(err) {
+    } catch (err) {
+        if (err) {
             console.log(err);
             req.session.paymentErrorMessage = err.raw.message
             res.status(200).redirect('/payment-fail')
         }
     }
 })
-
-
 
 module.exports = router;

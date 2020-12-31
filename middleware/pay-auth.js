@@ -1,6 +1,6 @@
 module.exports = (req, res, next) => {
     if(!req.session.payAuth) {
-        return res.redirect('/');
+        return res.redirect('/?action=false');
     }
 
     next();

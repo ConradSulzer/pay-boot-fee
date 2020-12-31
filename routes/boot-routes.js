@@ -48,14 +48,15 @@ router.get('/admin/view-boots', auth, async (req, res) => {
             toggle = key;
         }
 
-        res.render('partials/admin-panel/view-boots', {
+        res.status(200).render('partials/admin-panel/view-boots', {
             boots,
-            toggle
+            toggle,
+            role: req.session.agent.role
         });
 
     } catch (err) {
         console.log(err);
-        res.render('partials/admin-panel/module-unavailable');
+        res.status(500).render('partials/admin-panel/module-unavailable');
     }
 })
 
@@ -70,13 +71,24 @@ router.get('/admin/add-boot', auth, isAdmin, (req, res) => {
 });
 
 router.get('/admin/checkout-boot', auth, (req, res) => {
-    res.status(200).render('partials/admin-panel/checkout-boot');
+    if (req.headers.fetched === 'true') {
+        res.status(200).render('partials/admin-panel/checkout-boot', {
+            formId: 'add-boot'
+        });
+    } else {
+        res.status(403).redirect('/admin/dashboard');
+    }
 });
 
 router.get('/admin/checkin-boot', auth, (req, res) => {
-    res.status(200).render('partials/admin-panel/checkin-boot')
+    if (req.headers.fetched === 'true') {
+        res.status(200).render('partials/admin-panel/checkin-boot', {
+            formId: 'add-boot'
+        });
+    } else {
+        res.status(403).redirect('/admin/dashboard');
+    }
 })
-
 
 // POST request===========================================================================
 // =======================================================================================

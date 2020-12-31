@@ -17,6 +17,13 @@ router.get('/admin/login', (req, res) => {
         }
     }
 
+    if (req.query.admin === 'false') {
+        data = {
+            message: 'You must be logged in as an Admin to access that resource!',
+            alert: 'alert-danger'
+        }
+    }
+
     res.status(200).render('admin/login', data);
 });
 

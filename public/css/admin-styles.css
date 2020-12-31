@@ -162,6 +162,11 @@ ul ul a {
     margin-top: 10px;
 }
 
+.limit-width {
+    max-width: 300px;
+    width: 100%;
+}
+
 /* View Agents============================================================= */
 .agentList {
     list-style-type: none;

@@ -72,7 +72,9 @@
             <div class="boot-info">
                 <div id="<%= boot['_id'] %>" class="bootInfoDiv">
                     <div class="delete-div">
+                        <% if(role === "Admin") { %>
                         <div class="delete-boot text-danger" onclick="app.deleteBoot(this)" id="checkin" data.id="<%= boot['_id'] %>">Delete Boot</div>
+                        <% } %>
                         <% if (boot.flagged) { %>
                             <div class="delete-boot text-info" onclick="app.removeFlag(this)" data.id="<%= boot['bootId'] %>">Remove Flag</div>
                         <% } %>

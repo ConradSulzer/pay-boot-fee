@@ -67,8 +67,8 @@ const app = {
                 message: 'Passwords do not match',
                 alert: 'alert-danger'
             })
-            $('#password').value('');
-            $('#passwordConfirm').value('');
+            $('#password').val('');
+            $('#passwordConfirm').val('');
         }
 
         if (errorMessages.length !== 0) {
@@ -96,7 +96,6 @@ const app = {
     },
 
     toggleEditPassword: function (elem) {
-        console.log(elem);
         const parentLi = $(elem).closest('li');
         const toggleDiv = parentLi[0].lastElementChild
         $(toggleDiv).toggle();
@@ -117,6 +116,7 @@ const app = {
 
         if (sendData === 'success') {
             $(elem).closest('div').toggle();
+            $(elem).siblings('input').val('')
         }
     },
 

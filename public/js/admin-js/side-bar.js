@@ -20,24 +20,24 @@ $(document).ready(function () {
     // Side bar a tag event listener. Fetch EJS partial to inject on page
     $('#sidebar a').on('click', (e) => {
         const classname = e.target.className
-        if (classname === 'dropdown-toggle' || classname === 'dropdown-toggle collapsed' || classname === 'logout') {
-            return
-        }
-        const url = location.origin + '/admin/' + e.target.id;
 
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                "fetched": "true"
-            }
-        }).then((res) => {
-            if (res.status === 401) {
-                return window.location.href = '/admin/login';
-            }
-            res.text().then((html) => {
-                $('#dashboardMain').html(html);
-            })
-        });
+        if (classname === 'redirect') {
+            const url = location.origin + '/admin/' + e.target.id;
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    "fetched": "true"
+                }
+            }).then((res) => {
+                if (res.status === 401 || res.status === 403) {
+                    return window.location.href = '/admin/login';
+                }
+                res.text().then((html) => {
+                    $('#dashboardMain').html(html);
+                })
+            });
+        }
     });
 
     $(document).on('change', 'input[type=checkbox]', function () {
@@ -51,7 +51,7 @@ $(document).ready(function () {
             });
 
             app.bootFilter(checker);
-        }else {
+        } else {
             app.bootFilter('');
         }
     });

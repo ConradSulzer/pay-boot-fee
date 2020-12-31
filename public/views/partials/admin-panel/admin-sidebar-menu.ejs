@@ -2,7 +2,11 @@
     
     <div class="sidebar-header">
         <div>
-            <h3>Admin Panel</h3>
+            <% if(role === "Admin") { %>
+                <h3>Admin Panel</h3>
+            <% } else { %>
+                <h3>Agent Panel</h3>
+            <% } %>
         </div>
         <div id="dismiss">
             <i class="fas fa-arrow-circle-left"></i>
@@ -12,13 +16,23 @@
     
     <ul class="list-unstyled components">
         <li>
+            <a href="/admin/dashboard" id="dashboard">Dashboard</a>
+        </li>
+        <% if(role === "Admin") { %>
+        <li>
             <a href="#manageBootSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Manage Boots</a>
             <ul class="collapse list-unstyled" id="manageBootSubmenu">
                 <li>
-                    <a href="#view-boots" id="view-boots">View All Boots</a>
+                    <a href="#view-boots" id="view-boots" class="redirect">View All Boots</a>
                 </li>
                 <li>
-                    <a href="#add-boot" id="add-boot">Add New Boot</a>
+                    <a href="#add-boot" id="add-boot" class="redirect">Add New Boot</a>
+                </li>
+                <li>
+                    <a href="#checkout-boot" id="checkout-boot" class="redirect">Check-out Boot</a>
+                </li>
+                <li>
+                    <a href="#checkin-boot" id="checkin-boot" class="redirect">Check-in Boot</a>
                 </li>
             </ul>
         </li>
@@ -27,22 +41,27 @@
                 Agents</a>
             <ul class="collapse list-unstyled" id="manageAgentSubmenu">
                 <li>
-                    <a href="#view-agents" id="view-agents" class="sideBarMenuItem" >View All Agents</a>
+                    <a href="#view-agents" id="view-agents" class="redirect" >View All Agents</a>
                 </li>
                 <li>
-                    <a href="#add-new-agent" id="add-agent" class="sideBarMenuItem" >Add New Agent</a>
+                    <a href="#add-new-agent" id="add-agent" class="redirect" >Add New Agent</a>
                 </li>
             </ul>
         </li>
         <li>
-            <a href="#prices" id="prices">Prices</a>
+            <a href="#prices" id="prices" class="redirect">Prices</a>
+        </li>
+        <% } else { %>
+        <li>
+            <a href="#checkout-boot" id="checkout-boot" class="redirect">Check-out Boot</a>
         </li>
         <li>
-            <a href="#checkout-boot" id="checkout-boot">Check-out Boot</a>
+            <a href="#checkin-boot" id="checkin-boot" class="redirect">Check-in Boot</a>
         </li>
         <li>
-            <a href="#checkin-boot" id="checkin-boot">Check-in Boot</a>
+            <a href="#view-boots" id="view-boots" class="redirect">View All Boots</a>
         </li>
+        <% } %>
         <li>
             <a href="/admin/logout" class="logout">Logout</a>
         </li>
