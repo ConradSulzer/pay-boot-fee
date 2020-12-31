@@ -4,21 +4,25 @@
 
 <body>
     <div class="container">
-        <div class="input-boot-contain">
-            <div class="boot-id-title">
+        <div class="input-card">
+            <div class="card-title bottom-space">
                 <h4>PayMyBootFee.com</h4>
             </div>
             
             <form action="/validate-boot" method="POST">
                 <label for="enterBoot">Enter your boot ID to pay fee</label>
                 <input type="text" id="enterBoot" name="enterBoot" class="form-control bottom-space" placeholder="******" maxlength="6" minlength="6" required>
-                <button type="submit" class="btn btn-primary boot-id-next" disabled>Next</button>
+                <div class="button-bank">
+                    <button type="submit" class="btn btn-primary boot-id-next" disabled>Next</button>
+                </div>
+                
             </form>
             <div class="errorMessage">
                 <% if (typeof message !== 'undefined') {%>
                     <div class="alert alert-danger"><%= message %></div>
                 <% } %>
             </div>
+            <%- include('../partials/frontend/support-line.ejs') %>
         </div>
     </div>
 </body>

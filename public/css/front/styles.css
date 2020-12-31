@@ -34,11 +34,15 @@ body {
   margin-bottom: 20px;
 }
 
-/* Vehicle details===================================== */
+.support-line{
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .bottom-space {
   margin-bottom: 16px;
 }
+/* Vehicle details===================================== */
 
 .disclaimer-text {
   padding: 15px;
