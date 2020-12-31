@@ -11,8 +11,8 @@
             
             <form action="/validate-boot" method="POST">
                 <label for="enterBoot">Enter your boot ID to pay fee</label>
-                <input type="text" id="enterBoot" name="enterBoot" class="form-control bottom-space" placeholder="******" maxlength="6">
-                <button type="submit" class="btn btn-primary boot-id-next ">Next</button>
+                <input type="text" id="enterBoot" name="enterBoot" class="form-control bottom-space" placeholder="******" maxlength="6" minlength="6" required>
+                <button type="submit" class="btn btn-primary boot-id-next" disabled>Next</button>
             </form>
             <div class="errorMessage">
                 <% if (typeof message !== 'undefined') {%>

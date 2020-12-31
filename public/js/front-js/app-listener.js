@@ -1,12 +1,20 @@
-$('#enterBoot').on('keyup', (e) => {
-    const reg = new RegExp(`^${e.target.value}$`);
+$('#enterBoot').on('keyup', (evt) => {
+    const reg = new RegExp(`^${evt.target.value}$`);
 
     for(var i = 0; i < boots.length; i++) {
         if(reg.test(boots[i])) {
+            $('button').prop('disabled', false)
             $('.boot-id-next').removeClass('disabled');
             break;
         }else {
-            $('.boot-id-next').addClass('disabled');
+            $('button').prop('disabled', true)
+            // $('.boot-id-next').addClass('disabled');
         }
     }
 });
+
+$('#userInfo').on('submit', (evt) => {
+    $('button').prop('disabled', true);
+    $('button').toggle();
+    $('#loader').toggle();
+})

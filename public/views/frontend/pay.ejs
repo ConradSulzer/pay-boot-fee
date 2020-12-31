@@ -58,11 +58,11 @@
             </div>
             <!-- Stripe -->
 
-            <form action="/charge" method="POST" id="paymentForm" data-key="<%= pubKey %>">
+            <form action="/charge" method="POST" id="paymentForm" name="paymentForm" data-key="<%= pubKey %>">
                 <div class="row pay-row">
                     <div class="col">
                         <label for="name">Name on card</label>
-                        <input type="text" id="name" name="name" class="form-control card-info">
+                        <input type="text" id="name" name="name" class="form-control card-info" required>
                     </div>
                 </div>
                 <div class="row pay-row">
@@ -154,6 +154,9 @@
                         <button class="btn btn-danger" onclick="window.history.back()"> Back </button>
                     </a>
                     <button class="btn btn-primary"> Pay </button>
+                </div>
+                <div class="row" id="loader" style="display: none;">
+                    <img src="../../img/preloader.gif" class="align-self-center loader" alt="loading">
                 </div>
             </form>
         </div>

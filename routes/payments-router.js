@@ -13,7 +13,7 @@ const checkinBoot = require('../resources/checkin-boot');
 // ======================================================================================
 router.get('/', (req, res) => {
     if (req.query.action === 'false') {
-        res.status(200).render('frontend/index', {
+       return res.status(200).render('frontend/index', {
             message: 'Error: Enter Boot ID to continue!'
         });
     }
@@ -33,7 +33,6 @@ router.get('/user-info', payAuth, (req, res) => {
 });
 
 router.get('/pay', payAuth, (req, res) => {
-    console.log(req.session);
     const { fee, deposit } = require('../fees.json');
 
     const total = fixZeros((parseFloat(fee) + parseFloat(deposit)).toString());
@@ -102,10 +101,10 @@ router.post('/validate-boot', async (req, res) => {
         res.status(200).redirect('/user-info');
 
 
-    } catch (e) {
-        console.log(e);
+    } catch (err) {
+        console.log(err);
 
-        if (e) {
+        if (err) {
             return res.status(200).render('frontend/index', {
                 message: 'Something went wrong! Please try again.'
             });
@@ -122,7 +121,7 @@ router.post('/user-info', payAuth, async (req, res) => {
     }
 
     if (email !== confirmEmail) {
-        errorMessages.push('Error: Email address do not match!')
+        errorMessages.push('Error: Email addresses do not match!')
     }
 
     if (errorMessages.length > 0) {
@@ -135,8 +134,7 @@ router.post('/user-info', payAuth, async (req, res) => {
             }
         })
     }
-    console.log('EMAIL:', email);
-    console.log('SESSION', req.session);
+    
     req.session.email = email;
 
     res.status(200).redirect('/pay');

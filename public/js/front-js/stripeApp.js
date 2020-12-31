@@ -7,13 +7,13 @@ const stripeApp = {
     eventListeners: function () {
         $('#card-element').on('change', function (e) {
             const displayError = $('#card-errors')
-        
-            if(e.error) {
+
+            if (e.error) {
                 displayError.textContent = e.error.message;
             } else {
                 displayError.textContent = '';
             }
-        });        
+        });
     },
 
     paymentElement: function () {
@@ -28,18 +28,21 @@ const stripeApp = {
             }
         };
 
-        const card = elements.create('card', {style: style});
+        const card = elements.create('card', { style: style });
         card.mount('#card-element');
-        
+
         $('#paymentForm').on('submit', async function (event) {
             event.preventDefault();
+            // hide buttons and show loader
+            $('button').prop('disabled', true);
+            $('button').toggle();
+            $('#loader').toggle();
 
             const data = stripeApp.grabCardData();
 
             const result = await stripe.createToken(card, data);
 
-            if(result.error) {
-                // Show customer an error
+            if (result.error) {
                 console.log(result.error);
             } else {
                 stripeApp.tokenHandler(result.token);
@@ -62,7 +65,7 @@ const stripeApp = {
 
     grabCardData() {
         const data = {}
-        const x = $("#paymentForm").find(".card-info")
+        const x = $("#paymentForm").find(".card-info");
 
         $(x).each((index) => {
             data[x[index].id] = $(x[index]).val();

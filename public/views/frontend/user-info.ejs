@@ -55,7 +55,7 @@
                 <div class="col-4 top-border"></div>
                 <div class="col-4"></div>
             </div>
-            <form action="/user-info" method="POST">
+            <form action="/user-info" method="POST" id="userInfo">
                 <div class="bottom-space">
                     <label< for="email">Email</label>
                     <input type="text" id="email" name="email" class="form-control" placeholder="Enter email..." required>
@@ -69,7 +69,10 @@
                     <a href="/cancel">
                         <button type="button" class="btn btn-danger btn-cancel">Cancel</button>
                     </a>
-                    <button type="submit" class="btn btn-primary boot-id-next">Next</button>
+                    <button type="submit" class="btn btn-primary">Next</button>
+                </div>
+                <div class="row" id="loader" style="display: none;">
+                    <img src="../../img/preloader.gif" class="align-self-center loader" alt="loading">
                 </div>
                 <% if (typeof messages !=='undefined' ) {%>
                     <% messages.forEach((message)=> { %>
@@ -84,5 +87,5 @@
 </body>
 
 <%- include('../partials/frontend/foot.ejs') %>
-
+<script src="../../js/front-js/app-listener.js"></script>
 </footer>
