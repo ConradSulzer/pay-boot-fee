@@ -12,7 +12,7 @@ const checkinBoot = require('../resources/checkin-boot');
 // GET request==========================================================================
 // ======================================================================================
 router.get('/', (req, res) => {
-    if (req.query.action = 'false') {
+    if (req.query.action === 'false') {
         res.status(200).render('frontend/index', {
             message: 'Error: Enter Boot ID to continue!'
         });
