@@ -9,6 +9,7 @@ const sendReceiptUser = (session) => {
     bootTotal: session.total,
     adminEmail: process.env.ADMIN_EMAIL,
     unlock: session.boot.unlock,
+    transactionId: session.charge.id,
     subject: 'PayMyBootFee.com Receipt'
   }
 

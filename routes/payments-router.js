@@ -97,8 +97,14 @@ router.post('/validate-boot', async (req, res) => {
 
         req.session.payAuth = true;
         req.session.boot = boot
-
-        res.status(200).redirect('/user-info');
+        req.session.save((err) => {
+            if(err) {
+                console.log(err);
+            }
+            
+            res.status(200).redirect('/user-info');
+        })
+        
 
 
     } catch (err) {
@@ -155,7 +161,13 @@ router.post('/charge', payAuth, async (req, res) => {
             req.session.paidAuth = true;
             req.session.paidTime = new Date();
             req.session.charge = charge
-            res.redirect('/payment-complete')
+            req.session.save((err) => {
+                if(err) {
+                    console.log(err);
+                }
+
+                res.redirect('/payment-complete')
+            })
         }
 
     } catch (err) {

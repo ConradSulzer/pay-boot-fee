@@ -62,9 +62,11 @@ router.post('/admin/login', async (req, res) => {
             req.session.isLoggedIn = true;
             req.session.agent = agent;
 
-            req.session.save();
-
-            res.status(200).redirect('/admin/dashboard');
+            req.session.save((err) => {
+                console.log(err);
+                
+                res.status(200).redirect('/admin/dashboard');
+            });
 
         } else {
             return res.status(403).render('admin/login', invalidLogin);

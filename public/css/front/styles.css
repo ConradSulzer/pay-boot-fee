@@ -1,4 +1,5 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
 body {
   background: #383838;
   font-family: Poppins, sans-serif;
@@ -41,6 +42,14 @@ body {
 
 .bottom-space {
   margin-bottom: 16px;
+}
+
+.top-space {
+  margin-top: 16px;
+}
+
+.add-pad-sm {
+  padding: 10px;
 }
 /* Vehicle details===================================== */
 
@@ -86,4 +95,11 @@ body {
   margin-right: auto;
   margin-bottom: 30px;
   margin-top: 8px;
+}
+
+@media all and (max-width: 350px) {
+  .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }

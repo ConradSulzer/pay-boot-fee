@@ -172,7 +172,7 @@ router.post('/admin/checkout-boot', auth, async (req, res) => {
         await newBoot.save();
 
         return res.status(200).send([{
-            message: 'Boot checked out successfully!',
+            message: `Boot ${boot.bootId} checked out successfully!`,
             alert: 'alert-success',
             status: 'success'
         }, {
