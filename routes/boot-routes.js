@@ -306,8 +306,6 @@ router.post('/admin/unflag-boot', auth, async (req, res) => {
 });
 
 router.post('/admin/boot-note', auth, async (req, res) => {
-    console.log(req.body.id);
-
     if (req.body.note === '') {
         return res.status(200).send([{
             message: 'Note is empty!',

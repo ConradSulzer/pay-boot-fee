@@ -101,12 +101,10 @@ router.post('/validate-boot', async (req, res) => {
             if(err) {
                 console.log(err);
             }
-            
+
             res.status(200).redirect('/user-info');
         })
         
-
-
     } catch (err) {
         console.log(err);
 

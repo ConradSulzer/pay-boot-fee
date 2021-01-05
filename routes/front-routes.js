@@ -63,8 +63,10 @@ router.post('/admin/login', async (req, res) => {
             req.session.agent = agent;
 
             req.session.save((err) => {
-                console.log(err);
-                
+                if(err) {
+                    console.log(err);
+                }
+
                 res.status(200).redirect('/admin/dashboard');
             });
 
