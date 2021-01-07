@@ -301,8 +301,9 @@ const app = {
                 inputs.forEach((input) => {
                     input.value = '';
                 });
-                $('#currentFee').html(`Current Fee: $${data.fee}`);
-                $('#currentDeposit').html(`Current Deposit: $${data.deposit}`);
+                $('#currentFee').html(`Current Fee: ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(data.fee)}`);
+                
+                $('#currentDeposit').html(`Current Deposit: ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(data.deposit)}`);
             }
         }
     }

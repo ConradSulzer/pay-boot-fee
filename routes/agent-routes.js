@@ -54,8 +54,8 @@ router.get('/admin/prices', auth, isAdmin, (req, res) => {
         const { fee, deposit } = require('../fees.json');
 
         res.render('partials/admin-panel/prices', {
-            fee,
-            deposit
+            fee: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(fee / 100),
+            deposit: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(deposit / 100)
         });
     } else {
         res.redirect('/admin/dashboard');
@@ -126,7 +126,12 @@ router.post('/admin/add-agent', auth, isAdmin, async (req, res) => {
 });
 
 router.post('/admin/prices', auth, isAdmin, async (req, res) => {
-    const data = req.body;
+    const data = {
+        fee: parseFloat(req.body.fee) * 100,
+        deposit: parseFloat(req.body.deposit) * 100
+    };
+    
+    console.log(data);
 
     let dataString = JSON.stringify(data, null, 2);
 

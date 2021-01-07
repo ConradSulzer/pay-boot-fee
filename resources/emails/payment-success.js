@@ -28,7 +28,7 @@ const sendReceiptUser = (session) => {
 const sendPaymentRecord = (session) => {
   const data = {
     transactionId: session.charge.id,
-    amount: '$' + (session.charge.amount / 100),
+    amount: session.total,
     name: session.charge.billing_details.name,
     addressLine1: session.charge.billing_details.address.line1,
     addressLine2: session.charge.billing_details.address.line2,

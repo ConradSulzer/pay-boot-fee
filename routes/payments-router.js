@@ -5,7 +5,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const payAuth = require('../middleware/pay-auth');
 const paidAuth = require('../middleware/paid-auth');
 const Boot = require('../models/boot-model');
-const fixZeros = require('../resources/fix-zeros');
 const { sendReceiptUser, sendPaymentRecord } = require('../resources/emails/payment-success')
 const checkinBoot = require('../resources/checkin-boot');
 
@@ -35,22 +34,21 @@ router.get('/user-info', payAuth, (req, res) => {
 router.get('/pay', payAuth, (req, res) => {
     const { fee, deposit } = require('../fees.json');
 
-    const total = fixZeros((parseFloat(fee) + parseFloat(deposit)).toString());
-
-    req.session.fee = fee;
-    req.session.deposit = deposit;
-    req.session.total = total;
+    req.session.fee = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(fee / 100)
+    req.session.deposit = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(deposit / 100)
+    req.session.total = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format((fee + deposit) / 100)
 
     req.session.chargeAmount = {
-        fee: parseFloat(fee) * 100,
-        deposit: parseFloat(deposit) * 100,
-        total: parseFloat(total) * 100,
-    }
-
-    res.render('frontend/pay', {
         fee,
         deposit,
-        total,
+        total: fee + deposit,
+    }
+
+
+    res.render('frontend/pay', {
+        fee: req.session.fee,
+        deposit:req.session.deposit,
+        total: req.session.total,
         pubKey: process.env.STRIPE_PUBLISHABLE_KEY
     });
 });
